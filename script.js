@@ -11,26 +11,25 @@ if (navToggle && nav) {
 }
 const contactForm = document.querySelector('#contact-form');
 
-if (contactForm && typeof gtag === 'function') {
-  contactForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+window.dataLayer = window.dataLayer || [];
 
-    let formSubmitted = false;
+contactForm.addEventListener('submit', function (e) {
+  e.preventDefault();
 
-    const submitForm = () => {
-      if (!formSubmitted) {
-        formSubmitted = true;
-        contactForm.submit();
-      }
-    };
+  let formSubmitted = false;
 
-    gtag('event', 'contact_form_submit', {
-      form_name: 'contact_form',
-      page_location: window.location.href,
-      event_callback: submitForm
-    });
+  const submitForm = () => {
+    if (!formSubmitted) {
+      formSubmitted = true;
+      contactForm.submit();
+    }
+  };
 
-    // Fallback in case callback doesn't fire quickly
-    setTimeout(submitForm, 1000);
+  window.dataLayer.push({
+    event: 'contact_form_submit',
+    form_name: 'contact_form',
+    page_location: window.location.href
   });
-}
+
+  setTimeout(submitForm, 300);
+});
